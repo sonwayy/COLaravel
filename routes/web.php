@@ -3,6 +3,7 @@
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,16 @@ Route::middleware('auth')->group(function () {
 Route::resource('events', EventController::class);
 
 Route::post('events/{event}/participate', [EventController::class, 'participate'])->name('events.participate');
+
+// Route to show the event update form
+Route::get('events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
+
+// Route to handle the event update
+Route::put('events/{event}', [EventController::class, 'update'])->name('events.update');
+
+Route::get('mes-evenements', [EventController::class, 'userEvents'])->name('user.events')->middleware('auth');
+
+
 
 
 require __DIR__.'/auth.php';

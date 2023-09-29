@@ -19,10 +19,23 @@
             <!-- Ajoute d'autres détails de l'événement si nécessaire -->
         </table>
         @auth
-            <form action="{{ route('events.participate', $event->id) }}" method="POST">
-                @csrf
-                <button type="submit" class="btn btn-success">Participer à l'Événement</button>
-            </form>
+            @if(Auth::user()->id === $event->organizer)
+                <a href="{{ route('events.edit', $event->id) }}" class="btn btn-primary">Modifier l'événement</a>
+
+                <form action="{{ route('events.destroy', $event->id) }}" method="POST" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                </form>
+            @endif
+
+        @if( Auth::user()->id !== $event->organizer)
+
+                <form action="{{ route('events.participate', $event->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-success">Participer à l'Événement</button>
+                </form>
+            @endif
         @else
             <p>Vous devez être connecté pour participer à cet événement.</p>
         @endauth
