@@ -42,7 +42,7 @@ Route::put('events/{event}', [EventController::class, 'update'])->name('events.u
 
 Route::get('mes-evenements', [EventController::class, 'userEvents'])->name('user.events')->middleware('auth');
 
-
-
+// Route to participating events
+Route::get('participatingEvents', [EventController::class, 'participatingEvents'])->name('user.participatingEvents')->middleware('auth');
 
 require __DIR__.'/auth.php';
