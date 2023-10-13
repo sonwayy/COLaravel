@@ -36,4 +36,5 @@
             <p>Aucun événement trouvé.</p>
         @endif
     </div>
+    {{ $participatingEvents->links() }}
 @endsection
