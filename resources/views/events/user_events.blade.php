@@ -4,6 +4,10 @@
     <div class="container">
         <h2>Mes Événements</h2>
 
+        @auth
+            <a href="{{ route('events.create') }}" class="btn btn-primary mb-3">Créer un événement</a>
+        @endauth
+
         @if (!is_null($events) && count($events) > 0)
             <table class="table mt-4">
                 <thead>
@@ -18,7 +22,7 @@
                 @foreach($events as $event)
                     <tr>
                         <td>{{ $event->name }}</td>
-                        <td>{{ $event->date }}</td>
+                        <td>{{ date('d/m/Y H:i', strtotime($event->date)) }}</td>
                         <td>{{ $event->lieu }}</td>
                         <td>
                             <a href="{{ route('events.show', $event->id) }}" class="btn btn-info">Voir</a>
