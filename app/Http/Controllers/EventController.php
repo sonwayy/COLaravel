@@ -151,7 +151,7 @@ class EventController extends Controller
             $events = Event::all();
         }
 
-        return View::make('events._eventResults')->with('events', $events);
+        return view('events._eventResults', compact('events'));
     }
 
 }

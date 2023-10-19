@@ -5,7 +5,11 @@
     @foreach($events as $event)
         <tr>
             <td>{{ $event->name }}</td>
-            <!-- Display other event details -->
+            <td>{{ date('d/m/Y H:i', strtotime($event->date)) }}</td>
+            <td>{{ $event->lieu }}</td>
+            <td>
+                <a href="{{ route('events.show', $event->id) }}" class="btn btn-info">Voir</a>
+            </td>
         </tr>
     @endforeach
 </table>

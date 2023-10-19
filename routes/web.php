@@ -53,7 +53,8 @@ Route::get('participatingEvents', [EventController::class, 'participatingEvents'
 
 Auth::routes(['verify' => true]);
 
-Route::get('/events/liveSearch', [EventController::class, 'liveSearch'])->name('events.liveSearch');
+// live search route
+Route::get('/livesearch', [EventController::class, 'livesearch'])->name('livesearch');
 
 
 

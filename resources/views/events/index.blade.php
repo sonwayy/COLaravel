@@ -29,16 +29,18 @@
     </div>
 
     <!-- JavaScript for Ajax and Live Search -->
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js" ></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-        $(document).ready(function() {
+        $.noConflict();
+        jQuery(document).ready(function($) {
             $('#search').on('keyup', function() {
+
                 let query = $(this).val();
                 console.log('jQuery is working!');
 
                 $.ajax({
-                    url: "{{ route('events.liveSearch') }}",
+                    url: "{{ route('livesearch') }}",
                     method: "GET",
                     data: { query: query },
                     success: function(response) {
