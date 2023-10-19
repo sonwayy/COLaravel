@@ -8,16 +8,11 @@
             <a href="{{ route('events.create') }}" class="btn btn-primary mb-3">Créer un événement</a>
         @endauth
 
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Date</th>
-                <th>Lieu</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
+    <!-- Live Search -->
+        <input type="text" id="search" placeholder="Rechercher">
+
+        <table class="table" id="event-results">
+            <!-- Display events dynamically here -->
             @foreach($events as $event)
                 <tr>
                     <td>{{ $event->name }}</td>
@@ -28,8 +23,29 @@
                     </td>
                 </tr>
             @endforeach
-            </tbody>
         </table>
+
+        {{ $events->links() }}
     </div>
-    {{ $events->links() }}
+
+    <!-- JavaScript for Ajax and Live Search -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" ></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#search').on('keyup', function() {
+                let query = $(this).val();
+                console.log('jQuery is working!');
+
+                $.ajax({
+                    url: "{{ route('events.liveSearch') }}",
+                    method: "GET",
+                    data: { query: query },
+                    success: function(response) {
+                        $('#event-results').html(response);
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

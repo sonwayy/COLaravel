@@ -10,13 +10,13 @@
             </tr>
             <tr>
                 <th>Date:</th>
-                <td>{{ $event->date }}</td>
+                <td>{{ date('d/m/Y H:i', strtotime($event->date)) }}</td>
             </tr>
             <tr>
                 <th>Lieu:</th>
                 <td>{{ $event->lieu }}</td>
             </tr>
-            <!-- Ajoute d'autres détails de l'événement si nécessaire -->
+
         </table>
         @auth
             @if(Auth::user()->id === $event->organizer)
@@ -29,8 +29,7 @@
                 </form>
             @endif
 
-        @if( Auth::user()->id !== $event->organizer)
-
+            @if(Auth::user()->id !== $event->organizer && !$event->participants->contains(Auth::user()))
                 <form action="{{ route('events.participate', $event->id) }}" method="POST">
                     @csrf
                     <button type="submit" class="btn btn-success">Participer à l'Événement</button>

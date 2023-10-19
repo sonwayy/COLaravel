@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 
@@ -32,7 +33,7 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('events', EventController::class);
 
-Route::post('events/{event}/participate', [EventController::class, 'participate'])->name('events.participate');
+Route::post('events/{event}/participate', [EventController::class, 'participate'])->name('events.participate')->middleware('auth', 'verified');
 
 // Route to show the event update form
 Route::get('events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
@@ -40,9 +41,20 @@ Route::get('events/{event}/edit', [EventController::class, 'edit'])->name('event
 // Route to handle the event update
 Route::put('events/{event}', [EventController::class, 'update'])->name('events.update');
 
-Route::get('mes-evenements', [EventController::class, 'userEvents'])->name('user.events')->middleware('auth');
+// Only verified users can create events
+Route::get('events/create', [EventController::class, 'create'])->name('events.create')->middleware('auth', 'verified');
+
+// Seulement les utilisateurs vérifiés peuvent participer aux événements
+
+Route::get('mes-evenements', [EventController::class, 'userEvents'])->name('user.events')->middleware('auth', 'verified');
 
 // Route to participating events
-Route::get('participatingEvents', [EventController::class, 'participatingEvents'])->name('user.participatingEvents')->middleware('auth');
+Route::get('participatingEvents', [EventController::class, 'participatingEvents'])->name('user.participatingEvents')->middleware('auth', 'verified');
 
-require __DIR__.'/auth.php';
+Auth::routes(['verify' => true]);
+
+Route::get('/events/liveSearch', [EventController::class, 'liveSearch'])->name('events.liveSearch');
+
+
+
+    require __DIR__.'/auth.php';

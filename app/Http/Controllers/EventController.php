@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\View\View;
 
 
 class EventController extends Controller
@@ -139,6 +139,19 @@ class EventController extends Controller
             $participatingEvents = $user->participatingEvents()->paginate(5);
             return view('events.participating_events', compact('participatingEvents'));
         }
+    }
+
+    public function liveSearch(Request $request)
+    {
+        $query = $request->input('query');
+
+        if ($query) {
+            $events = Event::where('name', 'like', '%' . $query . '%')->get();
+        } else {
+            $events = Event::all();
+        }
+
+        return View::make('events._eventResults')->with('events', $events);
     }
 
 }

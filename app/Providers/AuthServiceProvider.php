@@ -6,6 +6,7 @@ namespace App\Providers;
 use App\Models\Event;
 use App\Policies\EventPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rules\Password;
 
 class AuthServiceProvider extends ServiceProvider
@@ -33,5 +34,22 @@ class AuthServiceProvider extends ServiceProvider
                 ->symbols()
                 ->uncompromised()
         );
+
+        // Define gate for update-event
+        Gate::define('update-event', function ($user, $event) {
+           return $user->id === $event->organizer;
+        });
+
+        // Define gate for delete-event
+        Gate::define('delete-event', function ($user, $event) {
+            return $user->id === $event->organizer;
+        });
+
+        // Define gate for edit-event
+        Gate::define('edit-event', function ($user, $event) {
+            return $user->id === $event->organizer;
+        });
+
+
     }
 }
