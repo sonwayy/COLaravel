@@ -18,11 +18,13 @@ use Illuminate\Support\Facades\Mail;
 */
 
 Route::get('/', function () {
-    return view('home');
+    //redirect to events page
+    return redirect()->route('events.index');
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    //redirect to events page
+    return redirect()->route('events.index');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

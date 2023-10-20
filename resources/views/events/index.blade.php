@@ -13,16 +13,28 @@
 
         <table class="table" id="event-results">
             <!-- Display events dynamically here -->
+            <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Date</th>
+                <th>Lieu</th>
+                <th>Organisateur</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
             @foreach($events as $event)
                 <tr>
                     <td>{{ $event->name }}</td>
                     <td>{{ date('d/m/Y H:i', strtotime($event->date)) }}</td>
                     <td>{{ $event->lieu }}</td>
+                    <td>{{ $event->organizer->name }}</td>
                     <td>
                         <a href="{{ route('events.show', $event->id) }}" class="btn btn-info">Voir</a>
                     </td>
                 </tr>
             @endforeach
+            </tbody>
         </table>
 
         {{ $events->links() }}

@@ -15,6 +15,7 @@
                     <th>Nom</th>
                     <th>Date</th>
                     <th>Lieu</th>
+                    <th>Organisateur</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -24,6 +25,7 @@
                         <td>{{ $event->name }}</td>
                         <td>{{ date('d/m/Y H:i', strtotime($event->date)) }}</td>
                         <td>{{ $event->lieu }}</td>
+                        <td>{{ $event->organizer->name }}</td>
                         <td>
                             <a href="{{ route('events.show', $event->id) }}" class="btn btn-info">Voir</a>
                             <a href="{{ route('events.edit', $event->id) }}" class="btn btn-primary">Modifier</a>

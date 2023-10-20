@@ -14,7 +14,8 @@ class EventPolicy
      */
     public function create(User $user): bool
     {
-        return true;
+        // Only logged in users can create events
+        return $user->id !== null;
     }
 
     /**

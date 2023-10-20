@@ -16,6 +16,10 @@
                 <th>Lieu:</th>
                 <td>{{ $event->lieu }}</td>
             </tr>
+            <tr>
+                <th>Organisateur:</th>
+                <td>{{ $event->organizer->name }}</td>
+            </tr>
 
         </table>
         @auth

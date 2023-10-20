@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\EventStarting;
 use App\Mail\EventCreatedMail;
 use App\Models\Event;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -21,7 +23,12 @@ class EventController extends Controller
 
     public function index()
     {
-        $events = Event::paginate(5);
+        $today = Carbon::today(); // Aujourd'hui
+
+        $events = Event::with('organizer')
+        ->where('date', '>=', $today)
+        ->orderBy('date', 'asc')
+        ->paginate(5);
 
         return view('events.index', compact('events'));
     }
@@ -44,7 +51,7 @@ class EventController extends Controller
             'name' => $request->input('name'),
             'date' => $request->input('date'),
             'lieu' => $request->input('lieu'),
-            'organizer' => Auth::id()
+            'organizer_id' => Auth::id()
             // Add other event attributes as needed
         ]);
 
@@ -57,6 +64,8 @@ class EventController extends Controller
         ];
 
         Mail::to($organizerMail)->send(new EventCreatedMail($details));
+
+        event(new EventStarting($event));
 
         return redirect()->route('events.index')->with('success', 'Event created successfully!');
     }
@@ -107,7 +116,7 @@ class EventController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'date' => 'required|date',
-            'lieu' => 'required|string|max:255'
+            'lieu' => 'required|string|max:255|min:3'
             // Add more validation rules as needed
         ]);
 
@@ -123,22 +132,29 @@ class EventController extends Controller
 
     public function userEvents()
     {
-        if (Auth::check()) {
-            $userId = Auth::id();
-            $user = User::find($userId);
-            $events = $user->events()->paginate(5);
-            return view('events.user_events', compact('events'));
-        }
+        $today = Carbon::today(); // Aujourd'hui
+
+        $events = User::with('events')
+            ->find(Auth::id())
+            ->events()
+            ->where('date', '>=', $today)
+            ->orderBy('date', 'asc')
+            ->paginate(5);
+
+        return view('events.user_events', compact('events'));
     }
 
     public function participatingEvents()
     {
-        if (Auth::check()) {
-            $userId = Auth::id();
-            $user = User::find($userId);
-            $participatingEvents = $user->participatingEvents()->paginate(5);
-            return view('events.participating_events', compact('participatingEvents'));
-        }
+        $today = Carbon::today(); // Aujourd'hui
+
+        $participatingEvents = User::with('participatingEvents')
+            ->find(Auth::id())
+            ->participatingEvents()
+            ->where('date', '>=', $today)
+            ->orderBy('date', 'asc')
+            ->paginate(5);
+        return view('events.participating_events', compact('participatingEvents'));
     }
 
     public function liveSearch(Request $request)

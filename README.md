@@ -13,5 +13,5 @@ Ce que j'ai fais :
 - Mot de passe fort à l'inscription
 - Vérification de l'email et accès à certaines parties après avoir vérifié son email
 - Reset du mot de passe
-- 
+- Barre de recherche
 

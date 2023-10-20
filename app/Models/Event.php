@@ -16,7 +16,7 @@ class Event extends Model
         'name',
         'date',
         'lieu',
-        'organizer'
+        'organizer_id'
         // Ajoute d'autres champs si nécessaire
     ];
 
@@ -27,7 +27,7 @@ class Event extends Model
 
     public function organizer(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'organizer');
+        return $this->belongsTo(User::class, 'organizer_id');
     }
 
 }
